@@ -1,9 +1,64 @@
 import React from 'react';
 
-export default function Footer() {
+import { useState } from "react";
+import QrReader from "react-qr-reader";
+
+
+const Footer = () => {
+  const [selected, setSelected] = useState("environment");
+  const [startScan, setStartScan] = useState(false);
+  const [loadingScan, setLoadingScan] = useState(false);
+  const [data, setData] = useState("");
+
+  const handleScan = async (scanData) => {
+    setLoadingScan(true);
+    console.log(`loaded data data`, scanData);
+    if (scanData && scanData !== "") {
+      console.log(`loaded >>>`, scanData);
+      setData(scanData);
+      setStartScan(false);
+      setLoadingScan(false);
+    //  setprecScan(scanData);
+    }
+  };
+  const handleError = (err) => {
+    console.error(err);
+  };
   return (
-    <footer className="Footer">
-      <input id="button" type="button" value="scan qr code"></input>
-    </footer>
+    <div className="App">
+      <h1>welcome!!scan the QR Code</h1>
+      <h2>
+        Last Scan:
+        {selected}
+      </h2>
+
+      <button
+        onClick={() => {
+          setStartScan(!startScan);
+        }}
+      >
+        {startScan ? "Stop Scan" : "Start Scan"}
+      </button>
+      {startScan && (
+        <>
+          <select onChange={(e) => setSelected(e.target.value)}>
+            <option value={"environment"}>Back Camera</option>
+            <option value={"user"}>Front Camera</option>
+          </select>
+          <QrReader
+            facingMode={selected}
+            delay={1000}
+            onError={handleError}
+            onScan={handleScan}
+            // chooseDeviceId={()=>selected}
+            style={{ width: "300px" }}
+          />
+        </>
+      )}
+      {loadingScan && <p>Loading</p>}
+      {data !== "" && <p>{data}</p>}
+    </div>
   );
-}
+};
+
+export default Footer;

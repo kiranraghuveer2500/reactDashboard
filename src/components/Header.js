@@ -1,9 +1,11 @@
 import React from 'react';
 
-export default function Header() {
+
+export default function Header(props) {
   return (
     <h1 className="Header">
-      <p>BABA KNOWLEDGE CENTER</p>
+      <p>library management system</p>
+      
     </h1>
   );
 }
